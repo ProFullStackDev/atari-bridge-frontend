@@ -7,12 +7,8 @@ import "./home.css";
 import { fromBigNum } from "../../utils";
 
 const Column = ({ children }) => {
-    return (
-        <div className="Column">
-            {children}
-        </div>
-    )
-}
+    return <div className="Column">{children}</div>;
+};
 
 export const BalancePanel = () => {
     const wallet = useWallet();
@@ -28,14 +24,13 @@ export const BalancePanel = () => {
         const balance = await state.provider.getBalance(wallet.account);
         dispatch({
             type: "balance",
-            payload: fromBigNum(balance)
-        })
-    }
+            payload: fromBigNum(balance),
+        });
+    };
 
     useEffect(() => {
-        if (wallet.status == "connected")
-            checkBalance();
-    }, [wallet.status])
+        if (!!state.provider && wallet.status == "connected") checkBalance();
+    }, [state.provider]);
 
     const sendCoin = async () => {
         try {
@@ -44,22 +39,30 @@ export const BalancePanel = () => {
         } catch (err) {
             setError(err.message);
         }
-    }
+    };
 
     return (
         <div className="Panel">
-            <div className='Center'>check balance</div>
+            <div className="Center">check balance</div>
             <Column>
                 <span className="Label">Balance : </span>
                 {state.balance}
             </Column>
             <Column>
                 <span className="Label">Send to : </span>
-                <input className="AddressInput" value={toAddress} onChange={(e) => setToAddress(e.target.value)}></input>
+                <input
+                    className="AddressInput"
+                    value={toAddress}
+                    onChange={(e) => setToAddress(e.target.value)}
+                ></input>
             </Column>
             <Column>
                 <span className="Label">Amount : </span>
-                <input className="AddressInput" value={amount} onChange={(e) => setAmount(e.target.value)}></input>
+                <input
+                    className="AddressInput"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                ></input>
             </Column>
             {res && (
                 <Column>
@@ -75,9 +78,9 @@ export const BalancePanel = () => {
                 </Column>
             )}
 
-            <div className='Center'>
+            <div className="Center">
                 <button onClick={sendCoin}>sendETH</button>
             </div>
         </div>
-    )
-}
+    );
+};
