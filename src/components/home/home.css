@@ -1,0 +1,38 @@
+.Panels {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.Panel {
+    padding: 10px;
+    text-align: left;
+    margin: 10px;
+    min-width: 700px;
+    border: solid 3px black;
+    overflow: auto;
+}
+
+.Center {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.Column {
+    margin-bottom: 10px;
+}
+
+.Label {
+    display: inline-block;
+    width: 100px;
+}
+
+.Error {
+    color: red;
+}
