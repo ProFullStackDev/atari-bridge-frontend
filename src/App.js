@@ -11,7 +11,6 @@ function App() {
     return (
         <div className="App">
             <UseWalletProvider
-                autoConnect={true}
                 connectors={{
                     walletconnect: { rpc: { 1: 'https://main-light.eth.linkpool.io/', 3: 'https://rpc-url', 4002: 'https://ftm-test.babylonswap.finance' } }
                 }}>

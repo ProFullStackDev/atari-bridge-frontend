@@ -33,9 +33,10 @@ export const BalancePanel = () => {
     }
 
     useEffect(() => {
-        if (wallet.status == "connected")
+        console.log(wallet.status)
+        if (!!state.provider&&wallet.status == "connected")
             checkBalance();
-    }, [wallet.status])
+    }, [wallet.status,state.provider])
 
     const sendCoin = async () => {
         try {

@@ -15,7 +15,7 @@ const NavBar = () => {
 
     return (
         <div className="Wallet-connect-panel">
-            {wallet.status != "Connected" ? (
+            {wallet.status != "connected" ? (
                 <div>
                     <button className="Connect-btn" onClick={connectToMetamask}>
                         connect wallet
