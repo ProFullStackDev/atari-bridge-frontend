@@ -7,9 +7,13 @@ export default function BalancePanel() {
 
     const [state, { sendERC20, tokenApprove }] = useBlockchainContext();
     const [amount, setAmount] = useState(0);
-    const [chain, setChain] = useState("1");
+    const [chain, setChain] = useState("0");
     const [approveFlag, setApproveFlag] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setChain("0");
+    }, [wallet.chainId]);
 
     useEffect(() => {
         if (state.approvedBalance >= amount) {
@@ -28,7 +32,6 @@ export default function BalancePanel() {
             if (wallet.status === "connected") {
                 setLoading(true);
                 const result = await sendERC20(chain, amount);
-
                 if (result) {
                     alert("Successfully Sent");
                     setLoading(false);
@@ -59,6 +62,16 @@ export default function BalancePanel() {
 
     return (
         <div className="Panel">
+            <div className="chain">
+                <h3>
+                    Chain:{" "}
+                    <b>
+                        {wallet.status === "connected"
+                            ? wallet.networkName
+                            : "Unsupported Chain"}
+                    </b>
+                </h3>
+            </div>
             <h1>Bridge</h1>
 
             <span>
@@ -76,13 +89,14 @@ export default function BalancePanel() {
             </span>
             <span>
                 <label htmlFor="chain">Select Chain: </label>
-                <select
-                    id="chain"
-                    onChange={(e) => setChain(e.target.value)}
-                    defaultValue="1"
-                >
-                    <option value={"4"}>Rinkby</option>
-                    <option value={"4002"}>Fantom</option>
+                <select id="chain" onChange={(e) => setChain(e.target.value)}>
+                    <option value={"0"}>select chain</option>
+                    {wallet.chainId !== 4 && (
+                        <option value={"4"}>Rinkby</option>
+                    )}
+                    {wallet.chainId !== 4002 && (
+                        <option value={"4002"}>Fantom</option>
+                    )}
                 </select>
             </span>
 
@@ -92,7 +106,9 @@ export default function BalancePanel() {
                         <div className="loader"></div>
                     </button>
                 ) : approveFlag ? (
-                    <button onClick={HandleSend}>Exchange</button>
+                    <button onClick={HandleSend} disabled={chain === "0"}>
+                        Exchange
+                    </button>
                 ) : (
                     <button onClick={HandleApprove}>Approve</button>
                 )

@@ -2,13 +2,18 @@
 // at 19/08/2022
 
 require("dotenv").config();
-const { ethers } = require("ethers");
+import * as ethers from "ethers";
 
-const supportChainId = process.env.REACT_APP_CHAINID;
+const supportChainIds = [
+    process.env.REACT_APP_CHAINID1 || "4",
+    process.env.REACT_APP_CHAINID2 || "4002",
+    // process.env.CHAINID3 || "31337"
+];
 
 const RPCS = {
-    // 1: "https://main-light.eth.linkpool.io/",
+    // 1: "http://13.59.118.124/eth",
     // 250: "https://rpc.ftm.tools/",
+    4: "http://85.206.160.196",
     4002: "https://ftm-test.babylonswap.finance",
     // 1337: "http://localhost:7545",
     // 31337: "http://localhost:8545/",
@@ -16,12 +21,11 @@ const RPCS = {
 
 const providers = {
     // 1: new ethers.providers.JsonRpcProvider(RPCS[1]),
+    4: new ethers.providers.JsonRpcProvider(RPCS[4]),
     // 250: new ethers.providers.JsonRpcProvider(RPCS[250]),
     4002: new ethers.providers.JsonRpcProvider(RPCS[4002]),
     // 1337: new ethers.providers.JsonRpcProvider(RPCS[1337]),
     // 31337: new ethers.providers.JsonRpcProvider(RPCS[31337]),
 };
 
-const provider = providers[supportChainId];
-
-module.exports = { provider, supportChainId };
+export { supportChainIds, providers };

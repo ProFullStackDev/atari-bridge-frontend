@@ -1,4 +1,8 @@
 {
+    "4": {
+        "treasury": "0x88BeEf46F24ab2307f9d76268E8D3Ef6A4D65694",
+        "token": "0x259EB91022c05fB94D51b64B2c769a942a9351A4"
+    },
     "4002": {
         "treasury": "0xA027B84853a1D94fE7350438CdB15065E166A794",
         "token": "0x8c49FA26d56BD0f4E908b9fD0e91E3D0B2f45BD8"

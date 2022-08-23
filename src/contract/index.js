@@ -1,26 +1,33 @@
 // by Logan <https://github.com/loganworld>
 // at 19/08/2022
 
-const { ethers } = require("ethers");
-const Abis = require("./contracts/abis.json");
-const Addresses = require("./contracts/addresses.json");
-const { provider, supportChainId } = require("./providers");
+import * as ethers from "ethers";
+import Abis from "./contracts/abis.json";
+import Addresses from "./contracts/addresses.json";
+import { providers, supportChainIds } from "./providers";
 
 // make contract objects
-const TreasuryContract = new ethers.Contract(
-    Addresses[supportChainId].treasury,
-    Abis.treasury,
-    provider
-);
+var Treasuries = {};
+var Tokens = {};
 
-const TokenContract = new ethers.Contract(
-    Addresses[supportChainId].token,
-    Abis.token,
-    provider
-);
+supportChainIds.map((supportChainId) => {
+    Treasuries = {
+        ...Treasuries,
+        [supportChainId]: new ethers.Contract(
+            Addresses[supportChainId].treasury,
+            Abis.treasury,
+            providers[supportChainId]
+        ),
+    };
 
-module.exports = {
-    provider,
-    TreasuryContract,
-    TokenContract,
-};
+    Tokens = {
+        ...Tokens,
+        [supportChainId]: new ethers.Contract(
+            Addresses[supportChainId].token,
+            Abis.token,
+            providers[supportChainId]
+        ),
+    };
+});
+
+export { Treasuries, Tokens };

@@ -8,7 +8,7 @@ import React, {
 import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
 import { toBigNum, fromBigNum } from "../utils";
-import { TokenContract, TreasuryContract } from "../contract";
+import { Treasuries, Tokens } from "../contract";
 
 // create context
 const BlockchainContext = createContext();
@@ -56,13 +56,13 @@ export default function Provider({ children }) {
                 payload: null,
             });
         }
-    }, [wallet.status]);
+    }, [wallet.status, wallet.chainId]);
 
     /* ------- blockchain interaction functions ------- */
     // get token balance
     const getBalance = async () => {
         if (wallet.status === "connected") {
-            let tx = await TokenContract.balanceOf(wallet.account);
+            let tx = await Tokens[wallet.chainId].balanceOf(wallet.account);
 
             dispatch({
                 type: "tokenBalance",
@@ -73,34 +73,32 @@ export default function Provider({ children }) {
 
     const getAllowance = async () => {
         if (wallet.status === "connected") {
-            let tx = await TokenContract.allowance(
+            let tx = await Tokens[wallet.chainId].allowance(
                 wallet.account,
-                TreasuryContract.address
+                Treasuries[wallet.chainId].address
             );
 
             dispatch({
                 type: "approvedBalance",
-                payload: fromBigNum(tx, 18),
+                payload: fromBigNum(tx, 8),
             });
         }
     };
 
     // interact with smart contract
     const sendERC20 = async (chain, amount) => {
-        let tx = await TreasuryContract.connect(state.signer).deposit(
-            toBigNum(amount, 8),
-            chain
-        );
+        let tx = await Treasuries[chain]
+            .connect(state.signer)
+            .deposit(toBigNum(amount, 8), chain);
 
         return tx;
     };
 
     const tokenApprove = async (props) => {
         const { amount } = props;
-        let tx = await TokenContract.connect(state.signer).approve(
-            TreasuryContract.address,
-            toBigNum(amount, 8)
-        );
+        let tx = await Tokens[wallet.chainId]
+            .connect(state.signer)
+            .approve(Treasuries[wallet.chainId].address, toBigNum(amount, 8));
 
         getAllowance();
         return tx;
