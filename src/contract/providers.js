@@ -4,7 +4,7 @@
 require("dotenv").config();
 const { ethers } = require("ethers");
 
-const supportChainId = process.env.REACT_APP_CHAINID || 4002;
+const supportChainId = process.env.REACT_APP_CHAINID;
 
 const RPCS = {
     // 1: "https://main-light.eth.linkpool.io/",
@@ -24,4 +24,4 @@ const providers = {
 
 const provider = providers[supportChainId];
 
-module.exports = { supportChainId, provider };
+module.exports = { provider, supportChainId };

@@ -1,39 +1,59 @@
 import { useEffect, useState } from "react";
-// import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
-
 import { useBlockchainContext } from "../../context";
-import { fromBigNum } from "../../utils";
 
 export default function BalancePanel() {
     const wallet = useWallet();
 
-    const [state, { dispatch, sendERC20, sendETH }] = useBlockchainContext();
-    const [toAddress, setToAddress] = useState("");
+    const [state, { sendERC20, tokenApprove }] = useBlockchainContext();
     const [amount, setAmount] = useState(0);
-
-    const [error, setError] = useState();
-    const [res, setRes] = useState();
-
-    const checkBalance = async () => {
-        const balance = await state.provider.getBalance(wallet.account);
-
-        dispatch({
-            type: "balance",
-            payload: fromBigNum(balance),
-        });
-    };
+    const [chain, setChain] = useState("1");
+    const [approveFlag, setApproveFlag] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!!state.provider && wallet.status == "connected") checkBalance();
-    }, [state.provider]);
+        if (state.approvedBalance >= amount) {
+            setApproveFlag(true);
+        } else {
+            setApproveFlag(false);
+        }
 
-    const sendCoin = async () => {
+        if (amount < 0 || amount === "") {
+            setAmount(0);
+        }
+    }, [state, amount]);
+
+    const HandleSend = async () => {
         try {
-            var tx = await sendETH(toAddress, amount);
-            setRes("transaction submitted with ", tx.hash);
+            if (wallet.status === "connected") {
+                setLoading(true);
+                const result = await sendERC20(chain, amount);
+
+                if (result) {
+                    alert("Successfully Sent");
+                    setLoading(false);
+                }
+            }
         } catch (err) {
-            setError(err.message);
+            console.log(err);
+            setLoading(false);
+        }
+    };
+
+    const HandleApprove = async () => {
+        try {
+            if (wallet.status === "connected") {
+                setLoading(true);
+                const result = await tokenApprove({ amount: amount });
+
+                if (result) {
+                    alert("Successfully Approve");
+                    setLoading(false);
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
         }
     };
 
@@ -43,29 +63,40 @@ export default function BalancePanel() {
 
             <span>
                 <label htmlFor="balance">Balance : </label>
-                <p id="balance">{state.balance}</p>
+                <p id="balance">{state.tokenBalance}</p>
             </span>
             <span>
                 <label htmlFor="amount">Amount : </label>
                 <input
                     type={"number"}
                     id={"amount"}
-                    className="AddressInput"
-                    value={toAddress}
-                    onChange={(e) => setToAddress(e.target.value)}
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
                 />
             </span>
             <span>
                 <label htmlFor="chain">Select Chain: </label>
-                <select id="chain">
-                    <option>1</option>
-                    <option>2</option>
+                <select
+                    id="chain"
+                    onChange={(e) => setChain(e.target.value)}
+                    defaultValue="1"
+                >
+                    <option value={"4"}>Rinkby</option>
+                    <option value={"4002"}>Fantom</option>
                 </select>
             </span>
 
-            {error && <div className="message">{error}</div>}
-
-            <button onClick={sendCoin}>SEND ETH</button>
+            {wallet.status === "connected" ? (
+                loading ? (
+                    <button>
+                        <div className="loader"></div>
+                    </button>
+                ) : approveFlag ? (
+                    <button onClick={HandleSend}>Exchange</button>
+                ) : (
+                    <button onClick={HandleApprove}>Approve</button>
+                )
+            ) : null}
         </div>
     );
 }

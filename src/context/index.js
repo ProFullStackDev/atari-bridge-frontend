@@ -8,7 +8,7 @@ import React, {
 import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
 import { toBigNum, fromBigNum } from "../utils";
-import { TANKTOKEN } from "../contract";
+import { TokenContract, TreasuryContract } from "../contract";
 
 // create context
 const BlockchainContext = createContext();
@@ -20,7 +20,8 @@ function reducer(state, { type, payload }) {
 }
 
 const INIT_STATE = {
-    balance: 0
+    tokenBalance: 0,
+    approvedBalance: 0,
 };
 
 // use contexts
@@ -34,42 +35,76 @@ export default function Provider({ children }) {
 
     // set signer
     useEffect(() => {
-        (async () => {
-            if (wallet.status === "connected") {
-                const provider = new ethers.providers.Web3Provider(
-                    wallet.ethereum
-                );
-                const signer = await provider.getSigner();
-                dispatch({
-                    type: "signer",
-                    payload: signer,
-                });
-                dispatch({
-                    type: "provider",
-                    payload: provider,
-                });
-            } else {
-                dispatch({
-                    type: "signer",
-                    payload: null,
-                });
-            }
-        })();
-    }, [wallet.status])
+        if (wallet.status === "connected") {
+            const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+            const signer = provider.getSigner();
+
+            dispatch({
+                type: "signer",
+                payload: signer,
+            });
+            dispatch({
+                type: "provider",
+                payload: provider,
+            });
+
+            getBalance();
+            getAllowance();
+        } else {
+            dispatch({
+                type: "signer",
+                payload: null,
+            });
+        }
+    }, [wallet.status]);
 
     /* ------- blockchain interaction functions ------- */
+    // get token balance
+    const getBalance = async () => {
+        if (wallet.status === "connected") {
+            let tx = await TokenContract.balanceOf(wallet.account);
+
+            dispatch({
+                type: "tokenBalance",
+                payload: fromBigNum(tx, 8),
+            });
+        }
+    };
+
+    const getAllowance = async () => {
+        if (wallet.status === "connected") {
+            let tx = await TokenContract.allowance(
+                wallet.account,
+                TreasuryContract.address
+            );
+
+            dispatch({
+                type: "approvedBalance",
+                payload: fromBigNum(tx, 18),
+            });
+        }
+    };
+
     // interact with smart contract
-    const sendERC20 = async (to, value) => {
-        if(!state.signer) throw new Error("Wallet isn't connected!")
-        let tx = await TANKTOKEN.connect(state.signer).transfer(to, toBigNum(value, 18));
+    const sendERC20 = async (chain, amount) => {
+        let tx = await TreasuryContract.connect(state.signer).deposit(
+            toBigNum(amount, 8),
+            chain
+        );
+
         return tx;
-    }
-    // interact with blockchain - send native coin
-    const sendETH = async (to, value) => {
-        if(!state.signer) throw new Error("Wallet isn't connected!")
-        let tx = await state.signer.sendTransaction({ to: to, value: toBigNum(value, 18) });
+    };
+
+    const tokenApprove = async (props) => {
+        const { amount } = props;
+        let tx = await TokenContract.connect(state.signer).approve(
+            TreasuryContract.address,
+            toBigNum(amount, 8)
+        );
+
+        getAllowance();
         return tx;
-    }
+    };
 
     return (
         <BlockchainContext.Provider
@@ -79,10 +114,11 @@ export default function Provider({ children }) {
                     {
                         dispatch,
                         sendERC20,
-                        sendETH
+                        getBalance,
+                        tokenApprove,
                     },
                 ],
-                [state]
+                [state, sendERC20, tokenApprove]
             )}
         >
             {children}

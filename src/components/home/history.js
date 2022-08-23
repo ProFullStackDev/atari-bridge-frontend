@@ -8,8 +8,8 @@ export default function HistoryPanel() {
             <h1>Transaction</h1>
 
             <div className={data.length > 5 ? "table scroll" : "table"}>
-                {data.map((item) => (
-                    <span>
+                {data.map((item, index) => (
+                    <span key={index}>
                         <p id="balance">{item}</p>
                     </span>
                 ))}
