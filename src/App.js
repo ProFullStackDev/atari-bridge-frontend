@@ -9,9 +9,10 @@ function App() {
     return (
         <div className="App">
             <UseWalletProvider
+                autoConnect={true}
                 connectors={{
                     injected: {
-                        chainId: [1, 4, 4002],
+                        chainId: [4, 4002],
                     },
                 }}
             >

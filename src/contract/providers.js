@@ -19,6 +19,15 @@ const RPCS = {
     // 31337: "http://localhost:8545/",
 };
 
+const Explorers = {
+    // 1: "http://13.59.118.124/eth",
+    // 250: "https://rpc.ftm.tools/",
+    4: "https://rinkeby.etherscan.io/tx/",
+    4002: "https://testnet.ftmscan.com/tx/",
+    // 1337: "http://localhost:7545",
+    // 31337: "http://localhost:8545/",
+};
+
 const providers = {
     // 1: new ethers.providers.JsonRpcProvider(RPCS[1]),
     4: new ethers.providers.JsonRpcProvider(RPCS[4]),
@@ -28,4 +37,4 @@ const providers = {
     // 31337: new ethers.providers.JsonRpcProvider(RPCS[31337]),
 };
 
-export { supportChainIds, providers };
+export { supportChainIds, providers, Explorers };

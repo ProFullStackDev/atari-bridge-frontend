@@ -5,7 +5,8 @@ import { useBlockchainContext } from "../../context";
 export default function BalancePanel() {
     const wallet = useWallet();
 
-    const [state, { sendERC20, tokenApprove }] = useBlockchainContext();
+    const [state, { sendERC20, tokenApprove, getAllowance, getBalance }] =
+        useBlockchainContext();
     const [amount, setAmount] = useState(0);
     const [chain, setChain] = useState("0");
     const [approveFlag, setApproveFlag] = useState(false);
@@ -35,6 +36,8 @@ export default function BalancePanel() {
                 if (result) {
                     alert("Successfully Sent");
                     setLoading(false);
+                    getAllowance();
+                    getBalance();
                 }
             }
         } catch (err) {
@@ -52,6 +55,7 @@ export default function BalancePanel() {
                 if (result) {
                     alert("Successfully Approve");
                     setLoading(false);
+                    getAllowance();
                 }
             }
         } catch (err) {
@@ -106,7 +110,10 @@ export default function BalancePanel() {
                         <div className="loader"></div>
                     </button>
                 ) : approveFlag ? (
-                    <button onClick={HandleSend} disabled={chain === "0"}>
+                    <button
+                        onClick={HandleSend}
+                        disabled={state.tokenBalance === 0 || chain === "0"}
+                    >
                         Exchange
                     </button>
                 ) : (

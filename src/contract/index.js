@@ -4,7 +4,7 @@
 import * as ethers from "ethers";
 import Abis from "./contracts/abis.json";
 import Addresses from "./contracts/addresses.json";
-import { providers, supportChainIds } from "./providers";
+import { providers, supportChainIds, Explorers } from "./providers";
 
 // make contract objects
 var Treasuries = {};
@@ -30,4 +30,4 @@ supportChainIds.map((supportChainId) => {
     };
 });
 
-export { Treasuries, Tokens };
+export { Treasuries, Tokens, Explorers };

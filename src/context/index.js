@@ -86,10 +86,10 @@ export default function Provider({ children }) {
     };
 
     // interact with smart contract
-    const sendERC20 = async (chain, amount) => {
-        let tx = await Treasuries[chain]
+    const sendERC20 = async (toChainId, amount) => {
+        let tx = await Treasuries[wallet.chainId]
             .connect(state.signer)
-            .deposit(toBigNum(amount, 8), chain);
+            .deposit(toBigNum(amount, 8), toChainId);
 
         return tx;
     };
@@ -100,7 +100,6 @@ export default function Provider({ children }) {
             .connect(state.signer)
             .approve(Treasuries[wallet.chainId].address, toBigNum(amount, 8));
 
-        getAllowance();
         return tx;
     };
 
@@ -114,9 +113,10 @@ export default function Provider({ children }) {
                         sendERC20,
                         getBalance,
                         tokenApprove,
+                        getAllowance,
                     },
                 ],
-                [state, sendERC20, tokenApprove]
+                [state, sendERC20, tokenApprove, getAllowance, getBalance]
             )}
         >
             {children}
