@@ -177,7 +177,7 @@ export default function Provider({ children }) {
     // interact with smart contract of staking
     const stakingApprove = async (props) => {
         const { amount } = props;
-        let tx = await Stakes[wallet.chainId]
+        let tx = await Tokens[wallet.chainId]
             .connect(state.signer)
             .approve(Stakes[wallet.chainId].address, toBigNum(amount, 8));
 
