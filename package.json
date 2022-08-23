@@ -3,6 +3,10 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@emotion/react": "^11.10.0",
+        "@emotion/styled": "^11.10.0",
+        "@mui/material": "^5.10.1",
+        "@mui/styled-engine-sc": "^5.10.1",
         "ethers": "5.7.0",
         "ethers-multicall": "0.2.3",
         "node-sass": "^7.0.1",
@@ -11,6 +15,7 @@
         "react-router-dom": "^6.3.0",
         "react-scripts": "^4.0.3",
         "sass": "^1.54.5",
+        "styled-components": "^5.3.5",
         "use-wallet": "loganworld/use-wallet",
         "web-vitals": "2.1.0",
         "webpack": "4.44.2"

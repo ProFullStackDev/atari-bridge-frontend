@@ -1,15 +1,20 @@
 import { useBlockchainContext } from "../context";
 import NavBar from "../components/navbar";
-import { BalancePanel } from "../components/home/panels";
+import BalancePanel from "../components/home/panels";
+import HistoryPanel from "../components/home/history";
+import { Container } from "@mui/system";
 
 export default function () {
     return (
         <div className="Home">
             <NavBar />
-            <div className="Panels">
+            <br />
+            <br />
+            <Container>
                 <BalancePanel />
-                <div className="Panel">sdfsdf</div>
-            </div>
+                <br />
+                <HistoryPanel />
+            </Container>
         </div>
     );
 }

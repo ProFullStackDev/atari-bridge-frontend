@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
 
 import { useBlockchainContext } from "../../context";
 import { fromBigNum } from "../../utils";
 
-const Column = ({ children }) => {
-    return <div className="Column">{children}</div>;
-};
-
-export const BalancePanel = () => {
+export default function BalancePanel() {
     const wallet = useWallet();
 
     const [state, { dispatch, sendERC20, sendETH }] = useBlockchainContext();
@@ -21,6 +17,7 @@ export const BalancePanel = () => {
 
     const checkBalance = async () => {
         const balance = await state.provider.getBalance(wallet.account);
+
         dispatch({
             type: "balance",
             payload: fromBigNum(balance),
@@ -42,44 +39,33 @@ export const BalancePanel = () => {
 
     return (
         <div className="Panel">
-            <div className="Center">check balance</div>
-            <Column>
-                <span className="Label">Balance : </span>
-                {state.balance}
-            </Column>
-            <Column>
-                <span className="Label">Send to : </span>
+            <h1>Bridge</h1>
+
+            <span>
+                <label htmlFor="balance">Balance : </label>
+                <p id="balance">{state.balance}</p>
+            </span>
+            <span>
+                <label htmlFor="amount">Amount : </label>
                 <input
+                    type={"number"}
+                    id={"amount"}
                     className="AddressInput"
                     value={toAddress}
                     onChange={(e) => setToAddress(e.target.value)}
-                ></input>
-            </Column>
-            <Column>
-                <span className="Label">Amount : </span>
-                <input
-                    className="AddressInput"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                ></input>
-            </Column>
-            {res && (
-                <Column>
-                    <span className="Label">Result : </span>
-                    {res}
-                </Column>
-            )}
+                />
+            </span>
+            <span>
+                <label htmlFor="chain">Select Chain: </label>
+                <select id="chain">
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+            </span>
 
-            {error && (
-                <Column>
-                    <span className="Label Error">Error : </span>
-                    {error}
-                </Column>
-            )}
+            {error && <div className="message">{error}</div>}
 
-            <div className="Center">
-                <button onClick={sendCoin}>sendETH</button>
-            </div>
+            <button onClick={sendCoin}>SEND ETH</button>
         </div>
     );
-};
+}

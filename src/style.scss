@@ -1,4 +1,9 @@
-@import "components";
+@import "components/navbar.scss";
+
+body {
+    margin: 0;
+    padding: 0;
+}
 
 iframe {
     display: none !important;

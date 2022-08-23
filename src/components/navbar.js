@@ -1,12 +1,10 @@
+import { Wallet } from "ethers";
 import { useWallet } from "use-wallet";
 
 const NavBar = () => {
     const wallet = useWallet();
     const connectToMetamask = async () => {
         wallet.connect();
-    };
-    const connectToWalletConnect = async () => {
-        wallet.connect("walletconnect");
     };
 
     const disconnect = async () => {
@@ -15,25 +13,18 @@ const NavBar = () => {
 
     return (
         <div className="Wallet-connect-panel">
-            {wallet.status != "connected" ? (
-                <div>
+            <div>
+                <h1>Logo</h1>
+                {wallet.status != "connected" ? (
                     <button className="Connect-btn" onClick={connectToMetamask}>
                         connect wallet
                     </button>
-                    <button
-                        className="Connect-btn"
-                        onClick={connectToWalletConnect}
-                    >
-                        connect to wallet connect
-                    </button>
-                </div>
-            ) : (
-                <div>
+                ) : (
                     <button className="Connect-btn" onClick={disconnect}>
                         disconnect
                     </button>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };
