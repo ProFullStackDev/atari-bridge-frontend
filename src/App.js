@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BlockchainProvider from "./context";
 import Home from "./views/home";
 
+import "./style.scss";
+
 function App() {
     return (
         <div className="App">

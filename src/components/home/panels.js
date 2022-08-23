@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
 
 import { useBlockchainContext } from "../../context";
-import "./home.css";
 import { fromBigNum } from "../../utils";
 
 const Column = ({ children }) => {
