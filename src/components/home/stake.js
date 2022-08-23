@@ -20,7 +20,7 @@ export default function BalancePanel() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (state.stakingApproveBalance > amount) {
+        if (state.stakingApproveBalance >= amount) {
             setApproveFlag(true);
         } else {
             setApproveFlag(false);
