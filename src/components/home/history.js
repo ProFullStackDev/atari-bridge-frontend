@@ -63,10 +63,7 @@ const columns = [
 export default function HistoryPanel() {
     const wallet = useWallet();
     const [data, setData] = useState(null);
-
-    useEffect(() => {
-        if (wallet.status === "connected") setInterval(getTx, 5000);
-    }, [wallet.status]);
+    var interveralId = null;
 
     const getTx = async () => {
         if (wallet.status === "connected") {
@@ -82,6 +79,13 @@ export default function HistoryPanel() {
             }
         }
     };
+
+    useEffect(() => {
+        if (interveralId != null) clearInterval(interveralId);
+        if (wallet.status === "connected") {
+            interveralId = setInterval(getTx, 5000);
+        }
+    }, [wallet.status, getTx]);
 
     return (
         <div className="History">

@@ -1,10 +1,17 @@
 {
     "4": {
-        "treasury": "0x88BeEf46F24ab2307f9d76268E8D3Ef6A4D65694",
-        "token": "0x259EB91022c05fB94D51b64B2c769a942a9351A4"
+        "treasury": "0x213B63094eF3FEB0e1E7836766f1d23f51197fA6",
+        "token": "0x1d9788EE6d70602bE26BD7bE814c6249A9f70322",
+        "staking": "0xC7Fa266c7E1C6849a805044c046b85C5ED89E46F"
     },
     "4002": {
-        "treasury": "0xA027B84853a1D94fE7350438CdB15065E166A794",
-        "token": "0x8c49FA26d56BD0f4E908b9fD0e91E3D0B2f45BD8"
+        "treasury": "0xE6883F3a6a33550516Cce011cEDdf828e7E9157C",
+        "token": "0x138fc06E977aEb9dB598fA25215AC8C16a8b92D8",
+        "staking": "0xC64506713A0004654b55A37f86CbCBf946329f20"
+    },
+    "31337": {
+        "treasury": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "token": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "staking": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
     }
 }

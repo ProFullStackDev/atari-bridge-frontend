@@ -1,4 +1,5 @@
 import { useWallet } from "use-wallet";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
     const wallet = useWallet();
@@ -14,15 +15,23 @@ const NavBar = () => {
         <div className="Wallet-connect-panel">
             <div>
                 <h1>Logo</h1>
-                {wallet.status != "connected" ? (
-                    <button className="Connect-btn" onClick={connectToMetamask}>
-                        connect wallet
-                    </button>
-                ) : (
-                    <button className="Connect-btn" onClick={disconnect}>
-                        disconnect
-                    </button>
-                )}
+
+                <div>
+                    <Link to="/stake">Stake</Link>&nbsp;&nbsp;&nbsp;
+                    <Link to="/">Bridge</Link>&nbsp;
+                    {wallet.status != "connected" ? (
+                        <button
+                            className="Connect-btn"
+                            onClick={connectToMetamask}
+                        >
+                            connect wallet
+                        </button>
+                    ) : (
+                        <button className="Connect-btn" onClick={disconnect}>
+                            disconnect
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -104,13 +104,6 @@
         }
     }
 
-    .message {
-        color: yellow;
-        padding: 25px;
-        font-size: 20px;
-        text-align: center;
-    }
-
     .loader {
         border: 5px solid #f3f3f3;
         border-radius: 50%;
@@ -178,6 +171,150 @@
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.37);
+            }
+        }
+    }
+}
+
+.Stake {
+    background-color: rgba(0, 0, 0, 0.699);
+    padding: 20px 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    min-width: 250px;
+
+    .chain {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        h3 {
+            margin: 0;
+            color: white;
+
+            b {
+                color: yellow;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    h1 {
+        text-transform: uppercase;
+        font-family: Tahoma;
+        color: black;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 0;
+        width: 100%;
+
+        label {
+            min-width: 150px;
+            background: black;
+            color: white;
+            font-size: 25px;
+            padding: 10px;
+            text-align: right;
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        p {
+            background-color: #aaa;
+            font-size: 25px;
+            margin: 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 0px 10px 10px 0px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 25px;
+            border-radius: 0px 10px 10px 0px;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+
+    .button_group {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 20px;
+
+        button {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            border: 2px solid #d10a1e;
+            outline: none;
+            background-color: #d10a1e;
+            padding: 10px 15px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: 0.4s all;
+            cursor: pointer;
+
+            &:hover {
+                background-color: transparent;
+                color: #d10a1e;
+            }
+
+            &:disabled {
+                background-color: #69000c;
+                border: 2px solid #69000c;
+                cursor: auto;
+                color: black;
+            }
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #d10a1e;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
             }
         }
     }

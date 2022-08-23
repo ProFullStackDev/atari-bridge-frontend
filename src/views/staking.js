@@ -1,7 +1,5 @@
 import styled from "styled-components";
-
-import BalancePanel from "../components/home/panels";
-import HistoryPanel from "../components/home/history";
+import Stake from "../components/home/stake";
 
 const Container = styled.div`
     padding-right: 1.5rem;
@@ -33,9 +31,7 @@ export default function () {
     return (
         <div className="Home">
             <Container>
-                <BalancePanel />
-                <br />
-                <HistoryPanel />
+                <Stake />
             </Container>
         </div>
     );

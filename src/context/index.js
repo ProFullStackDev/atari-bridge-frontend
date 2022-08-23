@@ -8,7 +8,7 @@ import React, {
 import { ethers } from "ethers";
 import { useWallet } from "use-wallet";
 import { toBigNum, fromBigNum } from "../utils";
-import { Treasuries, Tokens } from "../contract";
+import { Treasuries, Tokens, Stakes } from "../contract";
 
 // create context
 const BlockchainContext = createContext();
@@ -22,6 +22,9 @@ function reducer(state, { type, payload }) {
 const INIT_STATE = {
     tokenBalance: 0,
     approvedBalance: 0,
+    stakingApproveBalance: 0,
+    stakedAmount: 0,
+    rewardRate: 0,
 };
 
 // use contexts
@@ -50,6 +53,9 @@ export default function Provider({ children }) {
 
             getBalance();
             getAllowance();
+            getStakingAllowance();
+            getStakedAmount();
+            rewardRate();
         } else {
             dispatch({
                 type: "signer",
@@ -61,31 +67,96 @@ export default function Provider({ children }) {
     /* ------- blockchain interaction functions ------- */
     // get token balance
     const getBalance = async () => {
-        if (wallet.status === "connected") {
-            let tx = await Tokens[wallet.chainId].balanceOf(wallet.account);
+        try {
+            if (wallet.status === "connected") {
+                let tx = await Tokens[wallet.chainId].balanceOf(wallet.account);
 
+                dispatch({
+                    type: "tokenBalance",
+                    payload: fromBigNum(tx, 8),
+                });
+            }
+        } catch (err) {
             dispatch({
                 type: "tokenBalance",
-                payload: fromBigNum(tx, 8),
+                payload: 0,
             });
         }
     };
 
     const getAllowance = async () => {
-        if (wallet.status === "connected") {
-            let tx = await Tokens[wallet.chainId].allowance(
-                wallet.account,
-                Treasuries[wallet.chainId].address
-            );
+        try {
+            if (wallet.status === "connected") {
+                let tx = await Tokens[wallet.chainId].allowance(
+                    wallet.account,
+                    Treasuries[wallet.chainId].address
+                );
 
+                dispatch({
+                    type: "approvedBalance",
+                    payload: fromBigNum(tx, 8),
+                });
+            }
+        } catch (err) {
             dispatch({
                 type: "approvedBalance",
-                payload: fromBigNum(tx, 8),
+                payload: 0,
             });
         }
     };
 
-    // interact with smart contract
+    const getStakingAllowance = async () => {
+        try {
+            if (wallet.status === "connected") {
+                let tx = await Tokens[wallet.chainId].allowance(
+                    wallet.account,
+                    Stakes[wallet.chainId].address
+                );
+                dispatch({
+                    type: "stakingApproveBalance",
+                    payload: fromBigNum(tx, 8),
+                });
+            }
+        } catch (err) {
+            dispatch({
+                type: "stakingApproveBalance",
+                payload: 0,
+            });
+        }
+    };
+
+    const getStakedAmount = async () => {
+        try {
+            if (wallet.status === "connected") {
+                let tx = await Stakes[wallet.chainId].getLockedAmount(
+                    wallet.account
+                );
+
+                dispatch({
+                    type: "stakedAmount",
+                    payload: fromBigNum(tx, 8),
+                });
+            }
+        } catch (err) {
+            dispatch({
+                type: "stakedAmount",
+                payload: 0,
+            });
+        }
+    };
+
+    const rewardRate = async () => {
+        if (wallet.status === "connected") {
+            let tx = await Stakes[wallet.chainId].rewardRate();
+
+            dispatch({
+                type: "rewardRate",
+                payload: (fromBigNum(tx, 0) * 3600 * 24 * 365) / 10 ** 13,
+            });
+        }
+    };
+
+    // interact with smart contract of token and treasury
     const sendERC20 = async (toChainId, amount) => {
         let tx = await Treasuries[wallet.chainId]
             .connect(state.signer)
@@ -103,6 +174,34 @@ export default function Provider({ children }) {
         return tx;
     };
 
+    // interact with smart contract of staking
+    const stakingApprove = async (props) => {
+        const { amount } = props;
+        let tx = await Stakes[wallet.chainId]
+            .connect(state.signer)
+            .approve(Stakes[wallet.chainId].address, toBigNum(amount, 8));
+
+        return tx;
+    };
+
+    const stake = async (props) => {
+        const { amount } = props;
+        let tx = await Stakes[wallet.chainId]
+            .connect(state.signer)
+            .stake(toBigNum(amount, 8));
+
+        return tx;
+    };
+
+    const unstake = async (props) => {
+        const { amount } = props;
+        let tx = await Stakes[wallet.chainId]
+            .connect(state.signer)
+            .unstake(toBigNum(amount, 8));
+
+        return tx;
+    };
+
     return (
         <BlockchainContext.Provider
             value={useMemo(
@@ -114,9 +213,25 @@ export default function Provider({ children }) {
                         getBalance,
                         tokenApprove,
                         getAllowance,
+                        getStakingAllowance,
+                        stakingApprove,
+                        stake,
+                        unstake,
+                        getStakedAmount,
                     },
                 ],
-                [state, sendERC20, tokenApprove, getAllowance, getBalance]
+                [
+                    state,
+                    sendERC20,
+                    tokenApprove,
+                    getAllowance,
+                    getBalance,
+                    getStakingAllowance,
+                    stakingApprove,
+                    stake,
+                    unstake,
+                    getStakedAmount,
+                ]
             )}
         >
             {children}

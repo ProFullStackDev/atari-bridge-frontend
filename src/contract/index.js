@@ -9,6 +9,7 @@ import { providers, supportChainIds, Explorers } from "./providers";
 // make contract objects
 var Treasuries = {};
 var Tokens = {};
+var Stakes = {};
 
 supportChainIds.map((supportChainId) => {
     Treasuries = {
@@ -28,6 +29,15 @@ supportChainIds.map((supportChainId) => {
             providers[supportChainId]
         ),
     };
+
+    Stakes = {
+        ...Stakes,
+        [supportChainId]: new ethers.Contract(
+            Addresses[supportChainId].staking,
+            Abis.staking,
+            providers[supportChainId]
+        ),
+    };
 });
 
-export { Treasuries, Tokens, Explorers };
+export { Treasuries, Tokens, Stakes, Explorers };

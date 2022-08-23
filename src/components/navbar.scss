@@ -4,6 +4,7 @@
     width: 100%;
     background-color: rgb(15, 15, 15);
     padding: 5px 0;
+    margin-bottom: 30px;
 
     div {
         display: flex;
@@ -11,21 +12,34 @@
         justify-content: space-between;
         color: white;
 
-        button {
+        div {
             margin-right: 10%;
-            border: 2px solid #d10a1e;
-            outline: none;
-            background-color: #d10a1e;
-            padding: 15px 20px;
-            color: white;
-            font-weight: bold;
-            border-radius: 30px;
-            transition: 0.4s all;
-            cursor: pointer;
 
-            &:hover {
-                background-color: transparent;
-                color: #d10a1e;
+            a {
+                color: white;
+                text-decoration: none;
+                transition: 0.4s;
+
+                &:hover {
+                    color: #d10a1e;
+                }
+            }
+
+            button {
+                border: 2px solid #d10a1e;
+                outline: none;
+                background-color: #d10a1e;
+                padding: 15px 20px;
+                color: white;
+                font-weight: bold;
+                border-radius: 30px;
+                transition: 0.4s all;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: transparent;
+                    color: #d10a1e;
+                }
             }
         }
 
