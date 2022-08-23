@@ -12,7 +12,8 @@ function App() {
         <div className="App">
             <UseWalletProvider
                 connectors={{
-                    walletconnect: { rpc: { 1: 'https://main-light.eth.linkpool.io/', 3: 'https://rpc-url', 4002: 'https://ftm-test.babylonswap.finance' } }
+                    injected: { chainId: [1, 4] },
+                    walletconnect: { chainId: [1, 4], rpc: { 1: 'https://main-light.eth.linkpool.io/', 3: 'https://rpc-url', 4002: 'https://ftm-test.babylonswap.finance' } }
                 }}>
                 <BlockchainProvider>
                     <Router>
